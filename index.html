@@ -6,8 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="./styles.css">
+    <script src="https://kit.fontawesome.com/a1fb4a08a6.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    Weather app!
+    <header>Weather!!!</header>
+    <form id="get-location">
+        <label for="location">Enter city or zip code...</label>
+        <input type="text" id="location">
+
+        <button type="submit" id="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+
+    <!--
+    <form id="temp-unit-select">
+        <input type="radio" id="fahrenheit" value="fahrenheit" name="temp-units" checked>
+        <label for="fahrenhet">Fahrenheit</label>
+        
+        <input type="radio" id="celsius" value="celsius" name="temp-units">
+        <label for="celsius">Celsius</label>
+    </form>
+-->
+    <form id="unit-select">
+        <input type="radio" id="imperial" value="imperial" name="units" checked>
+        <label for="imperial">Imperial</label>
+    
+        <input type="radio" id="metric" value="metric" name="units">
+        <label for="metric">Metric</label>
+    </form>
+
+    <script src="./main.js"></script>
 </body>
 </html>
