@@ -1,7 +1,8 @@
-import { setCurrentWeather } from './CurrentWeather';
-import { setFutureForecast } from './FutureForecast';
+import { currentWeather } from './CurrentWeather';
+import { futureForecast } from './FutureForecast';
 
 let currentWeatherData;
+let futureForecastData;
 let location = 'College Station';
 let units = 'imperial';
 
@@ -26,24 +27,14 @@ function changeUnits() {
     update(location, units);
 }
 
-/*
-// Temperature unit changes
-const tempUnitBtns = document.querySelectorAll('input[name="temp-units"]');
-tempUnitBtns.forEach(btn => btn.addEventListener('change', changeTempUnits));
-
-function changeTempUnits() {
-    tempUnits = (tempUnits === 'celsius') ? 'fahrenheit' : 'celsius';
-    update(location, tempUnits);
-}
-*/
-
 // Update data/display
 async function update(location, units) {
-    currentWeatherData = await setCurrentWeather(location, units);
-    console.log(currentWeatherData)
+    currentWeatherData = await currentWeather.setCurrentWeather(location, units);
+    futureForecastData = await futureForecast.setFutureForecast(location, units);
+    console.log(currentWeatherData);
+    console.log(futureForecastData);
 }
 
 update(location, units);
 
-setFutureForecast('Oakville', units);
 
