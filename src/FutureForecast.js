@@ -1,15 +1,16 @@
 const futureForecast = (function () {
-    const forecasts = [];
+    let forecasts = [];
 
     const setFutureForecast = async (location, units) => {
         try {
             const data = await getData(location, units);
             const timezone = data.city.timezone;
+            forecasts = [];
 
             data.list.forEach(elem => {
                 let data = {
-                    date: setDate(elem.dt + timezone),
-                    time: setTime(elem.dt + timezone),
+                    date: setDate(elem.dt + timezone, new Date()),
+                    time: setTime(elem.dt + timezone, new Date()),
                     temp: setTemp(elem.main.temp),
                     weatherDesc: setWeatherDesc(elem.weather[0].main),
                     weatherIcon: setWeatherIcon(elem.weather[0].icon),
@@ -36,25 +37,23 @@ const futureForecast = (function () {
         }
     }
 
-    const setDate = (date) => {
-        const d = new Date(date * 1000);
-        const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+    const setDate = (date, now) => {
+        const d = new Date(((date + (now.getTimezoneOffset() * 60)) * 1000));
+        const dateFormat = new Intl.DateTimeFormat('default', {
+            hour: 'numeric',
+            minute: 'numeric',
+        });
 
-        return days[d.getUTCDay()];
+        return dateFormat.format(d);
     }
 
-    const setTime = (time) => {
-        const t = new Date(time * 1000);
+    const setTime = (time, now) => {
+        const t = new Date(((time + (now.getTimezoneOffset() * 60)) * 1000));
+        const timeFormat = new Intl.DateTimeFormat('default', {
+            weekday: 'short',
+        });
 
-        function pad(num) {
-            if (Math.floor(num / 10) === 0) {
-                return `0${num}`;
-            } else {
-                return num;
-            }
-        }
-
-        return `${pad(t.getUTCHours())}:${pad(t.getUTCMinutes())}`;
+        return timeFormat.format(t);
     }
 
     const setTemp = (temp) => {

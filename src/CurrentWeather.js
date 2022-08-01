@@ -18,7 +18,7 @@ const currentWeather = (function () {
         try {
             const data = await getData(location, units);
 
-            setDateTime(data.dt + data.timezone);
+            setDateTime(data.dt + data.timezone, new Date());
             setTemperatures(data.main.temp, data.main.feels_like);
             setWind(data.wind.deg, data.wind.speed, data.wind.gust);
             setHumidity(data.main.humidity);
@@ -45,28 +45,17 @@ const currentWeather = (function () {
         }
     }
 
-    const setDateTime = (dateTime) => {
-        const date = new Date(dateTime * 1000);
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const setDateTime = (dateTime, now) => {
+        const date = new Date(((dateTime + (now.getTimezoneOffset() * 60)) * 1000));
+        const dateFormat = new Intl.DateTimeFormat('default', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        });
 
-        function pad(num) {
-            if (Math.floor(num / 10) === 0) {
-                return `0${num}`;
-            } else {
-                return num;
-            }
-        }
-
-        const d = {
-            hours: pad(date.getUTCHours()),
-            minutes: pad(date.getUTCMinutes()),
-            weekday: days[date.getUTCDay()],
-            month: months[date.getUTCMonth()],
-            day: date.getUTCDate(),
-        }
-
-        weather.dateTime = `${d.hours}:${d.minutes}, ${d.weekday}, ${d.month} ${d.day}`;
+        weather.dateTime = dateFormat.format(date);
     }
 
     const setTemperatures = (currTemp, realFeel) => {

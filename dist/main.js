@@ -30,7 +30,7 @@ const currentWeather = (function () {
         try {
             const data = await getData(location, units);
 
-            setDateTime(data.dt + data.timezone);
+            setDateTime(data.dt + data.timezone, new Date());
             setTemperatures(data.main.temp, data.main.feels_like);
             setWind(data.wind.deg, data.wind.speed, data.wind.gust);
             setHumidity(data.main.humidity);
@@ -57,28 +57,17 @@ const currentWeather = (function () {
         }
     }
 
-    const setDateTime = (dateTime) => {
-        const date = new Date(dateTime * 1000);
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const setDateTime = (dateTime, now) => {
+        const date = new Date(((dateTime + (now.getTimezoneOffset() * 60)) * 1000));
+        const dateFormat = new Intl.DateTimeFormat('default', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        });
 
-        function pad(num) {
-            if (Math.floor(num / 10) === 0) {
-                return `0${num}`;
-            } else {
-                return num;
-            }
-        }
-
-        const d = {
-            hours: pad(date.getUTCHours()),
-            minutes: pad(date.getUTCMinutes()),
-            weekday: days[date.getUTCDay()],
-            month: months[date.getUTCMonth()],
-            day: date.getUTCDate(),
-        }
-
-        weather.dateTime = `${d.hours}:${d.minutes}, ${d.weekday}, ${d.month} ${d.day}`;
+        weather.dateTime = dateFormat.format(date);
     }
 
     const setTemperatures = (currTemp, realFeel) => {
@@ -132,17 +121,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "futureForecast": () => (/* binding */ futureForecast)
 /* harmony export */ });
 const futureForecast = (function () {
-    const forecasts = [];
+    let forecasts = [];
 
     const setFutureForecast = async (location, units) => {
         try {
             const data = await getData(location, units);
             const timezone = data.city.timezone;
+            forecasts = [];
 
             data.list.forEach(elem => {
                 let data = {
-                    date: setDate(elem.dt + timezone),
-                    time: setTime(elem.dt + timezone),
+                    date: setDate(elem.dt + timezone, new Date()),
+                    time: setTime(elem.dt + timezone, new Date()),
                     temp: setTemp(elem.main.temp),
                     weatherDesc: setWeatherDesc(elem.weather[0].main),
                     weatherIcon: setWeatherIcon(elem.weather[0].icon),
@@ -169,25 +159,23 @@ const futureForecast = (function () {
         }
     }
 
-    const setDate = (date) => {
-        const d = new Date(date * 1000);
-        const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+    const setDate = (date, now) => {
+        const d = new Date(((date + (now.getTimezoneOffset() * 60)) * 1000));
+        const dateFormat = new Intl.DateTimeFormat('default', {
+            hour: 'numeric',
+            minute: 'numeric',
+        });
 
-        return days[d.getUTCDay()];
+        return dateFormat.format(d);
     }
 
-    const setTime = (time) => {
-        const t = new Date(time * 1000);
+    const setTime = (time, now) => {
+        const t = new Date(((time + (now.getTimezoneOffset() * 60)) * 1000));
+        const timeFormat = new Intl.DateTimeFormat('default', {
+            weekday: 'short',
+        });
 
-        function pad(num) {
-            if (Math.floor(num / 10) === 0) {
-                return `0${num}`;
-            } else {
-                return num;
-            }
-        }
-
-        return `${pad(t.getUTCHours())}:${pad(t.getUTCMinutes())}`;
+        return timeFormat.format(t);
     }
 
     const setTemp = (temp) => {
