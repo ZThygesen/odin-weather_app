@@ -1,36 +1,45 @@
-import { DateTime } from "luxon";
-
 const currentWeather = (function () {
     const weather = {
-        dateTime: "",
+        date: "",
+        time: "",
+        sunrise: "",
+        sunset: "",
+        location: "",
+        country: "",
         temp: 0,
         realFeel: 0,
         weatherDesc: "",
         windDirection: "",
-        windSpeed: 0,
-        windGusts: 0,
+        windSpeed: "",
         humidity: 0,
         pressure: 0,
         weatherIcon: "",
+        countryFlag: "",
     }
 
     const setCurrentWeather = async (location, units) => {
         try {
             const data = await getData(location, units);
 
-            setDateTime(data.dt + data.timezone, new Date());
+            console.log(data);
+
+            setDate(data.dt + data.timezone);
+            setTime(data.dt + data.timezone);
+            setSunrise(data.sys.sunrise + data.timezone);
+            setSunset(data.sys.sunset + data.timezone);
+            setLocation(data.name, data.sys.country);
             setTemperatures(data.main.temp, data.main.feels_like);
-            setWind(data.wind.deg, data.wind.speed, data.wind.gust);
+            setWind(data.wind.deg, data.wind.speed, units);
             setHumidity(data.main.humidity);
             setPressure(data.main.pressure);
             setWeatherDesc(data.weather[0].description);
             setWeatherIcon(data.weather[0].icon);
+            setCountryFlag(data.sys.country);
 
             return weather;
 
         } catch (error) {
-            console.log(error);
-            return;
+            return error;
         }
     }
 
@@ -45,17 +54,34 @@ const currentWeather = (function () {
         }
     }
 
-    const setDateTime = (dateTime, now) => {
-        const date = new Date(((dateTime + (now.getTimezoneOffset() * 60)) * 1000));
+    const setDate = (date) => {
+        const now = new Date();
+        const d = new Date(((date + (now.getTimezoneOffset() * 60)) * 1000));
+        
         const dateFormat = new Intl.DateTimeFormat('default', {
             weekday: 'long',
             month: 'long',
             day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
         });
 
-        weather.dateTime = dateFormat.format(date);
+        weather.date = dateFormat.format(d);
+    }
+
+    const setTime = (time) => {
+        weather.time = getTime(time, new Date());
+    }
+
+    const setSunrise = (time) => {
+        weather.sunrise = getTime(time, new Date());
+    }
+
+    const setSunset = (time) => {
+        weather.sunset = getTime(time, new Date());
+    }
+
+    const setLocation = (location, country) => {
+        weather.location = location;
+        weather.country = country;
     }
 
     const setTemperatures = (currTemp, realFeel) => {
@@ -63,10 +89,14 @@ const currentWeather = (function () {
         weather.realFeel = Math.round(realFeel);
     }
 
-    const setWind = (deg, speed, gusts) => {
+    const setWind = (deg, speed, units) => {
         weather.windDirection = degToDirection(deg);
-        weather.windSpeed = speed;
-        weather.windGusts = gusts;
+
+        if (units === 'imperial') {
+            weather.windSpeed = `${Math.round(speed)} mph`;
+        } else {
+            weather.windSpeed = `${Math.round(speed)} m/s`;
+        }
     }
 
     const setHumidity = (humidity) => {
@@ -84,7 +114,22 @@ const currentWeather = (function () {
     }
 
     const setWeatherIcon = (iconCode) => {
-        weather.weatherIcon = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+        weather.weatherIcon = `./images/weather_icons/${iconCode}.svg`;
+    }
+
+    const setCountryFlag = (country) => {
+        weather.countryFlag = `https://countryflagsapi.com/png/${country}`;
+    }
+
+    const getTime = (time, now) => {
+        const date = new Date(((time + (now.getTimezoneOffset() * 60)) * 1000));
+
+        const dateFormat = new Intl.DateTimeFormat('default', {
+            hour: 'numeric',
+            minute: 'numeric',
+        });
+
+        return dateFormat.format(date);
     }
 
     const degToDirection = (deg) => {

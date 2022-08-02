@@ -40,8 +40,7 @@ const futureForecast = (function () {
     const setDate = (date, now) => {
         const d = new Date(((date + (now.getTimezoneOffset() * 60)) * 1000));
         const dateFormat = new Intl.DateTimeFormat('default', {
-            hour: 'numeric',
-            minute: 'numeric',
+            weekday: 'short',
         });
 
         return dateFormat.format(d);
@@ -50,7 +49,8 @@ const futureForecast = (function () {
     const setTime = (time, now) => {
         const t = new Date(((time + (now.getTimezoneOffset() * 60)) * 1000));
         const timeFormat = new Intl.DateTimeFormat('default', {
-            weekday: 'short',
+            hour: 'numeric',
+            minute: 'numeric',
         });
 
         return timeFormat.format(t);
@@ -65,7 +65,7 @@ const futureForecast = (function () {
     }
 
     const setWeatherIcon = (iconCode) => {
-        return `https://openweathermap.org/img/wn/${iconCode}@2x.png`
+        return `./images/weather_icons/${iconCode}.svg`;
     }
 
     return { setFutureForecast };
