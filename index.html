@@ -4,35 +4,45 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
+    <title>Forecast</title>
     <link rel="stylesheet" href="./styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Edu+SA+Beginner:wght@400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <script src="https://kit.fontawesome.com/a1fb4a08a6.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>Weather!!!</header>
-    <form id="get-location">
-        <label for="location">Enter city or zip code...</label>
-        <input type="text" id="location">
-
-        <button type="submit" id="search"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </form>
-
-    <!--
-    <form id="temp-unit-select">
-        <input type="radio" id="fahrenheit" value="fahrenheit" name="temp-units" checked>
-        <label for="fahrenhet">Fahrenheit</label>
-        
-        <input type="radio" id="celsius" value="celsius" name="temp-units">
-        <label for="celsius">Celsius</label>
-    </form>
--->
-    <form id="unit-select">
-        <input type="radio" id="imperial" value="imperial" name="units" checked>
-        <label for="imperial">Imperial</label>
-    
-        <input type="radio" id="metric" value="metric" name="units">
-        <label for="metric">Metric</label>
-    </form>
+    <header>&nbsp Weather Forecast</header>
+    <div class="content">
+        <div class="container">
+            <div class="current">
+                <div class="left">
+                    <form id="unit-select" class="top">
+                        <input type="radio" id="imperial" value="imperial" name="units" checked>
+                        <label for="imperial">Imperial</label>
+                    
+                        <input type="radio" id="metric" value="metric" name="units">
+                        <label for="metric">Metric</label>
+                    </form>
+                    <div class="left-info"></div>
+                </div>
+                <div class="center">
+                    <div class="center-info"></div>
+                    <div class="get-location">
+                        <form id="get-location">
+                            <input type="text" id="location-input" placeholder="Enter location...">
+                            <button type="submit" id="search"><i class="fa-solid fa-magnifying-glass fa-lg"></i></button>
+                        </form>
+                        <div class="error"></div>
+                    </div>
+                </div>
+                <div class="right"></div>
+            </div>
+            <div class="future"></div>
+        </div>
+    </div>
 
     <script src="./main.js"></script>
 </body>
