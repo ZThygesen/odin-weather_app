@@ -49,4 +49,5 @@ async function update(location, units) {
 
 update(location, units);
 
+setInterval(() => update(location, units), 3000);
 
