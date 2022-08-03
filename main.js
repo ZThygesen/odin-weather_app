@@ -32,8 +32,6 @@ const currentWeather = (function () {
         try {
             const data = await getData(location, units);
 
-            console.log(data);
-
             setDate(data.dt + data.timezone);
             setTime(data.dt + data.timezone);
             setSunrise(data.sys.sunrise + data.timezone);
@@ -294,7 +292,7 @@ const displayCurrent = (function () {
 
     const displayRightData = (data) => {
         rightInfo.innerHTML = `
-            <p class="top">${data.date}</p>
+            <p class="top date">${data.date}</p>
             <div class="right-info">
                 <div class="info">
                     <p>Wind</p>
@@ -339,14 +337,16 @@ const displayFuture = (function () {
 
     const createElem = (elem) => {
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'card-container';
 
         card.innerHTML = `
-            <p>${elem.date}</p>
-            <p>${elem.time}</p>
-            <img src=${elem.weatherIcon} alt="Weather Icon">
-            <p>${elem.temp}°</p>
-            <p>${elem.weatherDesc}</p>
+            <div class="card">
+                <p>${elem.date}</p>
+                <p>${elem.time}</p>
+                <img src=${elem.weatherIcon} alt="Weather Icon">
+                <p>${elem.temp}°</p>
+                <p>${elem.weatherDesc}</p>
+            </div>
         `;
 
         container.appendChild(card);
