@@ -44,7 +44,7 @@ const displayCurrent = (function () {
 
     const displayRightData = (data) => {
         rightInfo.innerHTML = `
-            <p class="top">${data.date}</p>
+            <p class="top date">${data.date}</p>
             <div class="right-info">
                 <div class="info">
                     <p>Wind</p>

@@ -21,8 +21,6 @@ const currentWeather = (function () {
         try {
             const data = await getData(location, units);
 
-            console.log(data);
-
             setDate(data.dt + data.timezone);
             setTime(data.dt + data.timezone);
             setSunrise(data.sys.sunrise + data.timezone);
