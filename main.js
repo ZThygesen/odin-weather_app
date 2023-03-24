@@ -25,7 +25,6 @@ const currentWeather = (function () {
         humidity: 0,
         pressure: 0,
         weatherIcon: "",
-        countryFlag: "",
     }
 
     const setCurrentWeather = async (location, units) => {
@@ -43,7 +42,6 @@ const currentWeather = (function () {
             setPressure(data.main.pressure);
             setWeatherDesc(data.weather[0].description);
             setWeatherIcon(data.weather[0].icon);
-            setCountryFlag(data.sys.country);
 
             return weather;
 
@@ -124,10 +122,6 @@ const currentWeather = (function () {
 
     const setWeatherIcon = (iconCode) => {
         weather.weatherIcon = `./images/weather_icons/${iconCode}.svg`;
-    }
-
-    const setCountryFlag = (country) => {
-        weather.countryFlag = `https://countryflagsapi.com/png/${country}`;
     }
 
     const getTime = (time, now) => {
@@ -281,7 +275,6 @@ const displayCurrent = (function () {
         centerInfo.innerHTML = `
             <div id="location">
                 <p>${data.location}, ${data.country}</p>
-                <img id="flag" src="${data.countryFlag}" alt="Flag">
             </div>
             <p id="weather-desc">${data.weatherDesc}</p>
             <p id="time">${data.time}</p>
