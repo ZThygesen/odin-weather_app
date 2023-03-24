@@ -33,7 +33,6 @@ const displayCurrent = (function () {
         centerInfo.innerHTML = `
             <div id="location">
                 <p>${data.location}, ${data.country}</p>
-                <img id="flag" src="${data.countryFlag}" alt="Flag">
             </div>
             <p id="weather-desc">${data.weatherDesc}</p>
             <p id="time">${data.time}</p>
